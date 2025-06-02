@@ -1,11 +1,24 @@
 const Book = require("../models/Book");
 
 const BookController = {
-  index: (req, res) => {
-    res.json({ msg: "all books list" });
+  index: async (req, res) => {
+    const books = await Book.find().sort({ createdAt: -1 });
+    res.json(books);
   },
-  show: (req, res) => {
-    res.json({ msg: "book got" });
+  show: async (req, res) => {
+    try {
+      const id = req.params.id;
+      if (!id) {
+        return res.status(400).json({ msg: "Book id is valid" });
+      }
+      const book = await Book.findById(id);
+      if (!book) {
+        return res.status(404).json({ msg: "Book not found" });
+      }
+      res.json(book);
+    } catch (error) {
+      res.status(500).json({ msg: "Failed to fetch book" });
+    }
   },
   store: async (req, res) => {
     try {
