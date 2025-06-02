@@ -34,11 +34,35 @@ const BookController = {
       res.status(500).json({ msg: "Failed to create book" });
     }
   },
-  update: (req, res) => {
-    res.json({ msg: "book updated" });
+  update: async (req, res) => {
+    try {
+      const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ msg: "Book id is valid" });
+      }
+      const book = await Book.findByIdAndUpdate(id, { ...req.body });
+      if (!book) {
+        return res.status(404).json({ msg: "Book not found" });
+      }
+      res.json(book);
+    } catch (error) {
+      res.status(500).json({ msg: "Failed to fetch book" });
+    }
   },
-  delete: (req, res) => {
-    res.json({ msg: "book deleted" });
+  delete: async (req, res) => {
+    try {
+      const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ msg: "Book id is valid" });
+      }
+      const book = await Book.findByIdAndDelete(id);
+      if (!book) {
+        return res.status(404).json({ msg: "Book not found" });
+      }
+      res.json(book);
+    } catch (error) {
+      res.status(500).json({ msg: "Failed to fetch book" });
+    }
   },
 };
 
