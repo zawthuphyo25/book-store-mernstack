@@ -1,4 +1,5 @@
 const Book = require("../models/Book");
+const mongoose = require("mongoose");
 
 const BookController = {
   index: async (req, res) => {
@@ -8,7 +9,7 @@ const BookController = {
   show: async (req, res) => {
     try {
       const id = req.params.id;
-      if (!id) {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({ msg: "Book id is valid" });
       }
       const book = await Book.findById(id);
