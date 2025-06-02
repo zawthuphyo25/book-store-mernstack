@@ -17,6 +17,16 @@ app.get("/", (req, res) => {
 const bookRoutes = require("./routes/books");
 app.use("/api/books", bookRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`);
+// Setup mongoDB connection
+const mongoose = require("mongoose");
+
+const mongoURL =
+  "mongodb+srv://zawthuphyo:bookstore1234@book-store.emjqvod.mongodb.net/?retryWrites=true&w=majority&appName=Book-Store";
+
+mongoose.connect(mongoURL).then(() => {
+  console.log("MongoDB connected");
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on localhost:${PORT}`);
+  });
 });
